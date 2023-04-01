@@ -1,19 +1,16 @@
-import axios from "axios";
-import { useEffect } from "react";
+import { Route, Routes } from "react-router-dom";
+import Login from "./pages/Login";
+import DashBoard from "./pages/admin/DashBoard";
+import AdminProducts from "./pages/admin/AdminProducts";
 function App() {
-  useEffect(() => {
-    (async () => {
-      const res = await axios.get(
-        `/v2/api/${process.env.REACT_APP_API_PATH}/products/all`
-      );
-      console.log(res);
-    })();
-  }, []);
   return (
     <div className="App">
-      <button type="button" className="btn btn-primary">
-        Primary
-      </button>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/admin" element={<DashBoard />}>
+          <Route path="products" element={<AdminProducts />} />
+        </Route>
+      </Routes>
     </div>
   );
 }
