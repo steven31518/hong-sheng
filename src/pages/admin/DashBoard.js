@@ -1,8 +1,15 @@
 import { Outlet, useNavigate, Link } from "react-router-dom/dist";
 import axios from "axios";
-import { useEffect } from "react";
+import { useEffect, useReducer } from "react";
+import Message from "../../Components/Message";
+import {
+  MessageContext,
+  messageReducer,
+  initialState,
+} from "../../store/messageStore";
 const DashBoard = () => {
   const navigate = useNavigate();
+  const reducer = useReducer(messageReducer, initialState);
   const logout = () => {
     document.cookie = "hongShengToken=;";
     navigate("/login");
@@ -29,7 +36,8 @@ const DashBoard = () => {
     })();
   }, [navigate, token]);
   return (
-    <>
+    <MessageContext.Provider value={reducer}>
+      <Message />
       <nav className="navbar navbar-expand-lg bg-dark">
         <div className="container-fluid">
           <p className="text-white mb-0">HONG SHENG 後台管理系統</p>
@@ -94,7 +102,7 @@ const DashBoard = () => {
           {/* Products end */}
         </div>
       </div>
-    </>
+    </MessageContext.Provider>
   );
 };
 export default DashBoard;

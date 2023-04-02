@@ -9,7 +9,7 @@ const CouponModal = ({ closeModal, getCoupons, type, tempCoupon }) => {
     due_date: 1555459200,
     code: "testCode",
   });
-
+  const [date, setDate] = useState(new Date());
   useEffect(() => {
     if (type === "create") {
       setTempData({
@@ -19,8 +19,10 @@ const CouponModal = ({ closeModal, getCoupons, type, tempCoupon }) => {
         due_date: 1555459200,
         code: "testCode",
       });
+      setDate(new Date());
     } else if (type === "edit") {
       setTempData(tempCoupon);
+      setDate(new Date(tempCoupon.due_date));
     }
     console.log(type, tempCoupon);
   }, [type, tempCoupon]);
@@ -44,7 +46,9 @@ const CouponModal = ({ closeModal, getCoupons, type, tempCoupon }) => {
       method = "put";
     }
     try {
-      const res = await axios[method](api, { data: tempData });
+      const res = await axios[method](api, {
+        data: { ...tempData, due_date: date.getTime() }, //轉換成unix time
+      });
       console.log(res);
       closeModal();
       getCoupons();
@@ -115,6 +119,17 @@ const CouponModal = ({ closeModal, getCoupons, type, tempCoupon }) => {
                       name="due_date"
                       placeholder="請輸入到期日"
                       className="form-control mt-1"
+                      value={`${date.getFullYear().toString()}-${(
+                        date.getMonth() + 1
+                      )
+                        .toString()
+                        .padStart(2, "0")}-${date
+                        .getDate()
+                        .toString()
+                        .padStart(2, "0")}`}
+                      onChange={(e) => {
+                        setDate(new Date(e.target.value));
+                      }}
                     />
                   </label>
                 </div>
@@ -139,7 +154,7 @@ const CouponModal = ({ closeModal, getCoupons, type, tempCoupon }) => {
                   type="checkbox"
                   id="is_enabled"
                   name="is_enabled"
-                  value={tempData.is_enabled}
+                  checked={!!tempData.is_enabled}
                   onChange={handleChange}
                 />
                 是否啟用
