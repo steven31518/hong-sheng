@@ -1,22 +1,83 @@
 import axios from "axios";
-import { useEffect } from "react";
+import { useEffect, useState, useRef } from "react";
+import ProductModal from "../../Components/ProductModal";
+import DeleteModal from "../../Components/DeleteModal";
+import { Modal } from "bootstrap";
 
 const AdminProducts = () => {
+  const [products, setProducts] = useState([]);
+  const [pagination, setPagination] = useState({});
+  //type:決定Modal的用途
+  const [type, setType] = useState("create"); //edit
+  const [tempProduct, setTempProduct] = useState({});
+  const productModal = useRef(null);
+  const deleteModal = useRef(null);
   useEffect(() => {
-    (async () => {
-      const productRes = await axios.get(
-        `/v2/api/${process.env.REACT_APP_API_PATH}/admin/products/all`
-      );
-      console.log(productRes);
-    })();
+    productModal.current = new Modal("#productModal", { backdrop: "static" });
+    deleteModal.current = new Modal("#deleteModal", { backdrop: "static" });
+
+    getProducts();
   }, []);
+  const getProducts = async (page) => {
+    const productRes = await axios.get(
+      `/v2/api/${process.env.REACT_APP_API_PATH}/admin/products`
+    );
+    console.log(productRes);
+    setProducts(productRes.data.products);
+    setPagination(productRes.data.pagination);
+  };
+
+  const openProductModal = (type, product) => {
+    setType(type);
+    setTempProduct(product);
+    productModal.current.show();
+  };
+  const closeProductModal = () => {
+    productModal.current.hide();
+  };
+  const openDeleteModal = (product) => {
+    setTempProduct(product);
+    deleteModal.current.show();
+  };
+  const closeDeleteModal = () => {
+    deleteModal.current.hide();
+  };
+  const deleteProduct = async (id) => {
+    try {
+      const res = await axios.delete(
+        `/v2/api/${process.env.REACT_APP_API_PATH}/admin/product/${id}`
+      );
+      if (res.data.success) {
+        getProducts();
+        deleteModal.current.hide();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <>
       <div className="p-3">
+        <ProductModal
+          closeProductModal={closeProductModal}
+          getProducts={getProducts}
+          type={type}
+          tempProduct={tempProduct}
+        />
+        <DeleteModal
+          closeDeleteModal={closeDeleteModal}
+          text={tempProduct.title}
+          handleDelete={deleteProduct}
+          id={tempProduct.id}
+        />
         <h3>產品列表</h3>
         <hr />
         <div className="text-end">
-          <button type="button" className="btn btn-primary btn-sm">
+          <button
+            type="button"
+            className="btn btn-primary btn-sm"
+            onClick={() => openProductModal("create", {})}
+          >
             建立新商品
           </button>
         </div>
@@ -31,23 +92,32 @@ const AdminProducts = () => {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>分類</td>
-              <td>名稱</td>
-              <td>價格</td>
-              <td>啟用</td>
-              <td>
-                <button type="button" className="btn btn-primary btn-sm">
-                  編輯
-                </button>
-                <button
-                  type="button"
-                  className="btn btn-outline-danger btn-sm ms-2"
-                >
-                  刪除
-                </button>
-              </td>
-            </tr>
+            {products.map((product) => {
+              return (
+                <tr key={product.id}>
+                  <td>{product.category}</td>
+                  <td>{product.title}</td>
+                  <td>{product.price}</td>
+                  <td>{product.is_enabled ? "啟用" : "未啟用"}</td>
+                  <td>
+                    <button
+                      type="button"
+                      className="btn btn-primary btn-sm"
+                      onClick={() => openProductModal("edit", product)}
+                    >
+                      編輯
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-outline-danger btn-sm ms-2"
+                      onClick={() => openDeleteModal(product)}
+                    >
+                      刪除
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
 
