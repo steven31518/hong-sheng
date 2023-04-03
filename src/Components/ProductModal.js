@@ -54,7 +54,16 @@ const ProductModal = ({
       setTempData({ ...tempData, [name]: value });
     }
   };
-
+  const uploadFile = async (e) => {
+    console.dir(e.target.files[0]);
+    const formData = new FormData();
+    formData.append("file-to-upload", e.target.files[0]);
+    const api = `/v2/api/${process.env.REACT_APP_API_PATH}/admin/upload`;
+    try {
+      const res = await axios.post(api, formData);
+      setTempData({ ...tempData, imageUrl: res.data.imageUrl });
+    } catch {}
+  };
   const submit = async () => {
     let api = `/v2/api/${process.env.REACT_APP_API_PATH}/admin/product`;
     let method = "post";
@@ -109,6 +118,8 @@ const ProductModal = ({
                         id="image"
                         placeholder="請輸入圖片連結"
                         className="form-control"
+                        onChange={handleChange}
+                        value={tempData.imageUrl}
                       />
                     </label>
                   </div>
@@ -119,10 +130,11 @@ const ProductModal = ({
                         type="file"
                         id="customFile"
                         className="form-control"
+                        onChange={uploadFile}
                       />
                     </label>
                   </div>
-                  <img src="" alt="" className="img-fluid" />
+                  <img src={tempData.imageUrl} alt="" className="img-fluid mt-2" />
                 </div>
                 <div className="col-sm-8">
                   {/*<pre>{JSON.stringify(tempData)}</pre>*/}

@@ -77,7 +77,7 @@ const DashBoard = () => {
               className="list-group-item list-group-item-action py-3"
               to="/admin/products"
             >
-              <i className="bi bi-cup-fill me-2" />
+              <i className="bi bi-tools me-2"></i>
               產品列表
             </Link>
             <Link
