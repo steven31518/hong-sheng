@@ -1,7 +1,12 @@
 import axios from "axios";
-import { useEffect } from "react";
-import { useState } from "react";
+import { useEffect, useContext, useState } from "react";
+import {
+  MessageContext,
+  handleSuccessMessage,
+  handleErrorMessage,
+} from "../store/messageStore";
 const CouponModal = ({ closeModal, getCoupons, type, tempCoupon }) => {
+  const [, dispatch] = useContext(MessageContext);
   const [tempData, setTempData] = useState({
     title: "",
     is_enabled: 1,
@@ -50,10 +55,12 @@ const CouponModal = ({ closeModal, getCoupons, type, tempCoupon }) => {
         data: { ...tempData, due_date: date.getTime() }, //轉換成unix time
       });
       console.log(res);
+      handleSuccessMessage(dispatch, res);
       closeModal();
       getCoupons();
     } catch (error) {
       console.log(error);
+      handleErrorMessage(dispatch, error);
     }
   };
   return (

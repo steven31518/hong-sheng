@@ -1,6 +1,11 @@
 import axios from "axios";
 import { useEffect } from "react";
-import { useState } from "react";
+import { useState, useContext } from "react";
+import {
+  MessageContext,
+  handleSuccessMessage,
+  handleErrorMessage,
+} from "../store/messageStore";
 const ProductModal = ({
   closeProductModal,
   getProducts,
@@ -18,6 +23,7 @@ const ProductModal = ({
     is_enabled: 1, //0 1
     imageUrl: "",
   });
+  const [, dispatch] = useContext(MessageContext);
 
   useEffect(() => {
     if (type === "create") {
@@ -59,10 +65,12 @@ const ProductModal = ({
     try {
       const res = await axios[method](api, { data: tempData });
       console.log(res);
+      handleSuccessMessage(dispatch, res);
       closeProductModal();
       getProducts();
     } catch (error) {
       console.log(error);
+      handleErrorMessage(dispatch, error);
     }
   };
   return (

@@ -1,22 +1,10 @@
 import { useContext } from "react";
-import { useState } from "react";
 import { MessageContext } from "../store/messageStore";
 const Message = () => {
   //   const [message, setMessage] = useState({});
-  const [message, dispatch] = useContext(MessageContext);
+  const [message] = useContext(MessageContext);
   return (
     <>
-      <button
-        type="button"
-        onClick={() => {
-          dispatch({ type: "POST_MESSAGE" });
-          setTimeout(() => {
-            dispatch({ type: "CLEAR_MESSAGE" });
-          }, 3000);
-        }}
-      >
-        press me
-      </button>
       <div
         className="toast-container position-fixed"
         style={{ top: "64px", right: "15px" }}
