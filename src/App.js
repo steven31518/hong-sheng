@@ -19,7 +19,7 @@ function App() {
         <Route path="/admin" element={<DashBoard />}>
           <Route path="products" element={<AdminProducts />} />
           <Route path="coupons" element={<AdminCoupons />} />
-          <Route path="orders" element={<AdminOrders />}></Route>
+          <Route path="orders" element={<AdminOrders />} />
         </Route>
       </Routes>
     </div>

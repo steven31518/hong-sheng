@@ -49,7 +49,7 @@ const ProductModal = ({
     if (["price", "origin_price"].includes(name)) {
       setTempData({ ...tempData, [name]: Number(value) });
     } else if (name === "is_enabled") {
-      setTempData({ ...tempData, [name]: +e.target.checked }); //boolean
+      setTempData({ ...tempData, [name]: +e.target.checked }); //boolean 型別轉換成數字
     } else {
       setTempData({ ...tempData, [name]: value });
     }
@@ -78,7 +78,7 @@ const ProductModal = ({
       closeProductModal();
       getProducts();
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       handleErrorMessage(dispatch, error);
     }
   };
@@ -134,7 +134,11 @@ const ProductModal = ({
                       />
                     </label>
                   </div>
-                  <img src={tempData.imageUrl} alt="" className="img-fluid mt-2" />
+                  <img
+                    src={tempData.imageUrl}
+                    alt=""
+                    className="img-fluid mt-2"
+                  />
                 </div>
                 <div className="col-sm-8">
                   {/*<pre>{JSON.stringify(tempData)}</pre>*/}
