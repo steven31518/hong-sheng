@@ -21,6 +21,7 @@ const DashBoard = () => {
     ?.split("=")[1];
   // console.log(token);
   axios.defaults.headers.common["Authorization"] = token;
+
   useEffect(() => {
     if (!token) {
       return navigate("/login");

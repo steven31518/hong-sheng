@@ -23,7 +23,7 @@ const AdminProducts = () => {
     const productRes = await axios.get(
       `/v2/api/${process.env.REACT_APP_API_PATH}/admin/products?page=${page}`
     );
-    console.log(productRes);
+    console.log("已載入產品列表", productRes);
     setProducts(productRes.data.products);
     setPagination(productRes.data.pagination);
   };
