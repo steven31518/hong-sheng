@@ -1,10 +1,26 @@
 import { Outlet } from "react-router-dom";
 import Navbar from "../../Components/Navbar";
+import { useEffect, useState } from "react";
+import axios from "axios";
 const FrontLayout = () => {
+  const [cartData, setCartData] = useState({});
+  const getCart = async () => {
+    try {
+      const cartRes = await axios.get(
+        `/v2/api/${process.env.REACT_APP_API_PATH}/cart`
+      );
+      setCartData(cartRes.data.data);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  useEffect(() => {
+    getCart();
+  }, []);
   return (
     <>
-      <Navbar />
-      <Outlet></Outlet>
+      <Navbar cartData={cartData} />
+      <Outlet context={{ getCart, cartData }}></Outlet>
       <div className="bg-dark">
         <div className="container">
           <div className="d-flex align-items-center justify-content-between text-white py-4">
