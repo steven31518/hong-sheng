@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 import Pagination from "../../Components/Pagination";
 const Products = () => {
   const [products, setProducts] = useState([]);
@@ -26,11 +27,12 @@ const Products = () => {
                   <img
                     src={product.imageUrl}
                     className="card-img-top rounded-0 object-cover"
+                    
                     alt="..."
                   />
                   <div className="card-body p-0">
                     <h4 className="mb-0 mt-2">
-                      <a href="#">{product.title}</a>
+                      <Link to={`/product/${product.id}`}>{product.title}</Link>
                     </h4>
                     <p className="card-text text-muted mb-0">
                       {product.content}
