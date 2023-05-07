@@ -1,18 +1,40 @@
 import { useOutletContext } from "react-router-dom";
+import { useState } from "react";
 import axios from "axios";
 
 function Cart() {
   const { cartData, getCart } = useOutletContext();
+  const [loadingItems, setloadingItems] = useState([]);
   const removeCartItem = async (id) => {
     try {
       const res = await axios.delete(
         `/v2/api/${process.env.REACT_APP_API_PATH}/cart/${id}`
       );
-      getCart();
       console.log(res);
+      getCart();
     } catch (e) {
       console.log(e);
     }
+  };
+  const updateCartItem = async (item, quantity) => {
+    const data = {
+      data: {
+        product_id: item.product_id,
+        qty: quantity,
+      },
+    };
+    setloadingItems([...loadingItems, item.id]);
+    try {
+      const res = await axios.put(
+        `/v2/api/${process.env.REACT_APP_API_PATH}/cart/${item.id}`,
+        data
+      );
+      console.log(res);
+      setloadingItems(
+        loadingItems.filter((loadingObject) => loadingObject !== item.id)
+      );
+      getCart();
+    } catch {}
   };
   return (
     <div className="container">
@@ -48,26 +70,26 @@ function Cart() {
                   <p className="mb-1 text-muted" style={{ fontSize: "14px" }}>
                     {item.product.content}
                   </p>
-                  <div className="d-flex justify-content-between align-items-center w-100">
-                    <div className="input-group w-50 align-items-center">
-                      <div className="input-group-prepend pe-1">
-                        <a href="#">
-                          <i className="fas fa-minus"></i>
-                        </a>
-                      </div>
-                      <input
-                        type="text"
-                        className="form-control border-0 text-center my-auto shadow-none bg-light px-0"
-                        placeholder=""
-                        aria-label="Example text with button addon"
-                        aria-describedby="button-addon1"
-                      />
-                      <div className="input-group-append ps-1">
-                        <a href="#">
-                          <i className="fas fa-plus"></i>
-                        </a>
-                      </div>
-                    </div>
+                  <div className="d-flex justify-content-center align-items-center w-100">
+                    <div className="input-group w-50 align-items-center "></div>
+                    <select
+                      name=""
+                      className="form-select"
+                      id=""
+                      value={item.qty}
+                      disabled={loadingItems.includes(item.id)}
+                      onChange={(e) => {
+                        updateCartItem(item, e.target.value * 1);
+                      }}
+                    >
+                      {[...new Array(20)].map((i, num) => {
+                        return (
+                          <option value={num + 1} key={num}>
+                            {num + 1}
+                          </option>
+                        );
+                      })}
+                    </select>
                     <p className="mb-0 ms-auto">NT$ {item.final_total}</p>
                   </div>
                 </div>
