@@ -45,7 +45,7 @@ const CheckOut = () => {
                     type="text"
                     errors={errors}
                     id="name"
-                    inputLabel="User"
+                    inputLabel="姓名"
                     rules={{
                       required: {
                         value: true,
