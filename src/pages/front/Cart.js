@@ -1,4 +1,4 @@
-import { useOutletContext } from "react-router-dom";
+import { Link, useOutletContext } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
 
@@ -119,12 +119,12 @@ function Cart() {
             <p className="mb-0 h4 fw-bold">Total Amount</p>
             <p className="mb-0 h4 fw-bold">NT$ {cartData.final_total}</p>
           </div>
-          <a
-            href="./checkout.html"
+          <Link
+            to="/check"
             className="btn btn-dark w-100 mt-4 rounded-0 py-3"
           >
             確認
-          </a>
+          </Link>
         </div>
       </div>
     </div>

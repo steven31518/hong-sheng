@@ -1,9 +1,9 @@
-import { Link, useOutletContext } from "react-router-dom";
+import { Link, useOutletContext, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { UserInput } from "../../Components/FormElemets";
+import { UserInput, TextArea } from "../../Components/FormElemets";
+import axios from "axios";
 const CheckOut = () => {
   const { cartData } = useOutletContext();
-
   const {
     register,
     handleSubmit,
@@ -11,8 +11,28 @@ const CheckOut = () => {
   } = useForm({
     mode: "onTouched",
   });
-  const onSubmit = (data) => {
-    console.log(data);
+  const navigate = useNavigate();
+  const onSubmit = async (data) => {
+    const { name, email, tel, address, message } = data;
+    const form = {
+      data: {
+        user: {
+          name,
+          email,
+          tel,
+          address,
+        },
+        message,
+      },
+    };
+    try {
+      const res = await axios.post(
+        `/v2/api/${process.env.REACT_APP_API_PATH}/order`,
+        form
+      );
+      console.log(res);
+      navigate(`/success/${res.data.orderId}`);
+    } catch {}
   };
   return (
     <div className="bg-light pt-5 pb-7">
@@ -82,7 +102,33 @@ const CheckOut = () => {
                     }}
                   />
                 </div>
-
+                <div className="mb-2">
+                  <UserInput
+                    id="address"
+                    inputLabel="地址"
+                    type="address"
+                    errors={errors}
+                    register={register}
+                    rules={{
+                      required: "地址為必填",
+                    }}
+                  />
+                </div>
+                <div className="mb-2">
+                  <TextArea
+                    register={register}
+                    errors={errors}
+                    inputLabel="留言"
+                    id="message"
+                    rules={{
+                      required: {
+                        value: true,
+                        message: "Please enter a message in the textarea.",
+                      },
+                      maxLength: { value: 50, message: "字數不能超過50字" },
+                    }}
+                  />
+                </div>
                 <p className="mt-4 mb-3">Shipping address</p>
                 <div className="form-row">
                   <div className="col mb-2">
@@ -151,9 +197,9 @@ const CheckOut = () => {
                   </label>
                 </div>
                 <div className="d-flex flex-column-reverse flex-md-row mt-4 justify-content-between align-items-md-center align-items-end w-100">
-                  <a href="./product.html" className="text-dark mt-md-0 mt-3">
+                  <Link to="/products" className="text-dark mt-md-0 mt-3">
                     <i className="fas fa-chevron-left me-2"></i> 繼續購物
-                  </a>
+                  </Link>
                   <button
                     type="submit"
                     className="btn btn-dark py-3 px-7 rounded-0"
@@ -223,7 +269,7 @@ const CheckOut = () => {
               </table>
               <div className="d-flex justify-content-between mt-4">
                 <p className="mb-0 h4 fw-bold">Total</p>
-                <p className="mb-0 h4 fw-bold">NT$24,000</p>
+                <p className="mb-0 h4 fw-bold">NT${cartData.final_total}</p>
               </div>
             </div>
           </div>
