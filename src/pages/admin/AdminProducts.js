@@ -13,12 +13,7 @@ const AdminProducts = () => {
   const [tempProduct, setTempProduct] = useState({});
   const productModal = useRef(null);
   const deleteModal = useRef(null);
-  useEffect(() => {
-    productModal.current = new Modal("#productModal", { backdrop: "static" });
-    deleteModal.current = new Modal("#deleteModal", { backdrop: "static" });
 
-    getProducts();
-  }, []);
   const getProducts = async (page = 1) => {
     const productRes = await axios.get(
       `/v2/api/${process.env.REACT_APP_API_PATH}/admin/products?page=${page}`
@@ -56,6 +51,12 @@ const AdminProducts = () => {
       console.log(error);
     }
   };
+  useEffect(() => {
+    productModal.current = new Modal("#productModal", { backdrop: "static" });
+    deleteModal.current = new Modal("#deleteModal", { backdrop: "static" });
+
+    getProducts();
+  }, []);
   return (
     <>
       <div className="p-3">
