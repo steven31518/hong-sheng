@@ -119,10 +119,7 @@ function Cart() {
             <p className="mb-0 h4 fw-bold">Total Amount</p>
             <p className="mb-0 h4 fw-bold">NT$ {cartData.final_total}</p>
           </div>
-          <Link
-            to="/check"
-            className="btn btn-dark w-100 mt-4 rounded-0 py-3"
-          >
+          <Link to="/check" className="btn btn-dark w-100 mt-4 rounded-0 py-3">
             確認
           </Link>
         </div>
