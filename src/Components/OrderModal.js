@@ -31,7 +31,6 @@ const OrderModal = ({ closeProductModal, getOrders, tempOrder }) => {
       setTempData((preState) => ({ ...preState, [name]: value }));
     }
   };
-
   const submit = async () => {
     setIsLoading(true);
     try {
