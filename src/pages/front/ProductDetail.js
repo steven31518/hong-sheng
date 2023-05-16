@@ -3,6 +3,7 @@ import axios from "axios";
 import { useOutletContext, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { createMessage } from "../../slice/messageSlice";
+import { createAsyncMessage } from "../slice/messageSlice";
 function ProductDetail() {
   const [product, setProduct] = useState({});
   const [cartQty, setCartQty] = useState(1);
@@ -30,7 +31,7 @@ function ProductDetail() {
         `/v2/api/${process.env.REACT_APP_API_PATH}/cart`,
         data
       );
-      console.log(cartRes);
+      console.log("購物車訊息", cartRes);
       getCart();
       setIsLoading(false);
     } catch (e) {

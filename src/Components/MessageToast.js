@@ -1,4 +1,5 @@
 import { useSelector } from "react-redux";
+
 const Message = () => {
   const message = useSelector((state) => state.message);
   console.log(message); //[]
@@ -9,7 +10,7 @@ const Message = () => {
         style={{ top: "64px", right: "15px" }}
       >
         {message.length &&
-          message.map((msg) => {
+          message?.map((msg) => {
             return (
               <div
                 key={msg.id}
@@ -33,8 +34,6 @@ const Message = () => {
             );
           })}
       </div>
-
-      {/**/}
     </>
   );
 };
