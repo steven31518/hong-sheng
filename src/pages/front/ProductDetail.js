@@ -2,8 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useOutletContext, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { createMessage } from "../../slice/messageSlice";
-import { createAsyncMessage } from "../slice/messageSlice";
+import { createAsyncMessage } from "../../slice/messageSlice";
 function ProductDetail() {
   const [product, setProduct] = useState({});
   const [cartQty, setCartQty] = useState(1);
@@ -32,10 +31,12 @@ function ProductDetail() {
         data
       );
       console.log("購物車訊息", cartRes);
+      dispatch(createAsyncMessage(cartRes.data));
       getCart();
       setIsLoading(false);
     } catch (e) {
       console.log(e);
+      dispatch(createAsyncMessage(e.response.data));
     }
   };
   useEffect(() => {
