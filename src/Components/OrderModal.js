@@ -22,7 +22,6 @@ const OrderModal = ({ closeProductModal, getOrders, tempOrder }) => {
       status: tempOrder.status,
     });
   }, [tempOrder]);
-
   const handleChange = (e) => {
     const { name, value, checked } = e.target;
     if (["is_paid"].includes(name)) {

@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useOutletContext, useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { createMessage } from "../../slice/messageSlice";
 function ProductDetail() {
   const [product, setProduct] = useState({});
   const [cartQty, setCartQty] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const { id } = useParams();
   const { getCart } = useOutletContext();
+  const dispatch = useDispatch();
   const getProduct = async (id) => {
     const productRes = await axios.get(
       `/v2/api/${process.env.REACT_APP_API_PATH}/product/${id}`
